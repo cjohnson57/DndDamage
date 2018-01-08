@@ -14,7 +14,7 @@ namespace DndDamage
 
             while(true)
             {
-                Console.WriteLine("Make a choice: \n 1: Attack! \n 2: Change Character \n 3: Set Details Level \n 4: Exit");
+                Console.WriteLine("\nMake a choice: \n 1: Attack! \n 2: Change Character \n 3: Set Details Level \n 4: Exit");
                 string choice = Console.ReadLine();
                 if (choice == "1")
                 {
@@ -166,6 +166,7 @@ namespace DndDamage
             Random r = new Random();
             for (int i = 0; i < Attacks; i++)
             {
+                //Roll d20
                 roll = r.Next(1, 21);
                 tohitrolls += " " + roll.ToString();
                 tohitrollsbonus += " " + (roll + ToHit).ToString();
@@ -189,22 +190,30 @@ namespace DndDamage
             }
             for (int i = 0; i < hits; i++)
             {
+                //Roll damage die
                 roll = r.Next(1, DamageDie + 1);
                 damagerolls += " " + roll.ToString();
                 damagerollsbonus += " " + (roll + DamageBonus).ToString();
                 totaldamage += roll + DamageBonus;
             }
+            int hitdisplaysubtract = 0;
+            //If the crit house rule is not being used, scoring a crit acts as if getting an extra hit, so I increment hits twice.
+            //However, there is still technically only one hit. So I use this so the proper amount of hits is displayed.
+            if (!CritHouseRule)
+            {
+                hitdisplaysubtract = crits;
+            }
             if (DetailsLevel == 2)
             {
                 Console.WriteLine(tohitrolls);
-                Console.WriteLine(hits.ToString() + " hits, " + crits.ToString() + " crits.");
+                Console.WriteLine((hits - hitdisplaysubtract).ToString() + " hits, " + crits.ToString() + " crits.");
                 Console.WriteLine(damagerolls);
             }
             else if (DetailsLevel == 3)
             {
                 Console.WriteLine(tohitrolls);
                 Console.WriteLine(tohitrollsbonus);
-                Console.WriteLine(hits.ToString() + " hits, " + crits.ToString() + " crits.");
+                Console.WriteLine((hits - hitdisplaysubtract).ToString() + " hits, " + crits.ToString() + " crits.");
                 Console.WriteLine(damagerolls);
                 Console.WriteLine(damagerollsbonus);
             }
